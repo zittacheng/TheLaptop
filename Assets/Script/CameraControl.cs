@@ -5,46 +5,83 @@ using UnityEngine;
 namespace LAP
 {
     public class CameraControl : MonoBehaviour {
-        public GameObject CameraPivot;
-        public Vector2 OriAngle;
-        public Vector2 HorizontalCursorLimit;
-        public Vector2 HorizontalAngleLimit;
-        public Vector2 VerticalCursorLimit;
-        public Vector2 VerticalAngleLimit;
+        [HideInInspector]
+        public static CameraControl Main;
+        public Camera MainCamera;
+        public CameraPoint CurrentPoint;
+        public float TransitTime;
+        public bool Animating;
 
         private void Awake()
         {
-            OriAngle = new Vector2(CameraPivot.transform.eulerAngles.x, CameraPivot.transform.eulerAngles.y);
+            Main = this;
         }
 
         // Start is called before the first frame update
         void Start()
         {
-
+            
         }
 
         // Update is called once per frame
         void Update()
         {
-            RotationUpdate();
-        }
-
-        public void FixedUpdate()
-        {
-            RotationUpdate();
-        }
-
-        public void RotationUpdate()
-        {
-            if (!Cursor.Main)
+            if (Animating)
                 return;
-            float y = OriAngle.y;
-            float yScale = (Cursor.Main.transform.position.x - HorizontalCursorLimit.x) / (HorizontalCursorLimit.y - HorizontalCursorLimit.x);
-            y += HorizontalAngleLimit.x + (HorizontalAngleLimit.y - HorizontalAngleLimit.x) * yScale;
-            float x = OriAngle.x;
-            float xScale = (Cursor.Main.transform.position.y - VerticalCursorLimit.x) / (VerticalCursorLimit.y - VerticalCursorLimit.x);
-            x -= VerticalAngleLimit.x + (VerticalAngleLimit.y - VerticalAngleLimit.x) * xScale;
-            CameraPivot.transform.eulerAngles = new Vector3(x, y, 0);
+            PositionUpdate();
+        }
+
+        private void FixedUpdate()
+        {
+            if (Animating)
+                return;
+            PositionUpdate();
+        }
+
+        public void PositionUpdate()
+        {
+            if (!CurrentPoint)
+                return;
+            transform.position = CurrentPoint.transform.position;
+            transform.eulerAngles = CurrentPoint.transform.eulerAngles;
+            MainCamera.fieldOfView = CurrentPoint.ViewField;
+        }
+
+        public void SetPoint(CameraPoint Point, float T)
+        {
+            Animating = true;
+            CurrentPoint = Point;
+            TransitTime = T;
+            StopCoroutine("TransitToPoint");
+            StartCoroutine("TransitToPoint");
+        }
+
+        public IEnumerator TransitToPoint()
+        {
+            Vector3 OriPosition = transform.position;
+            Vector3 OriRotation = transform.eulerAngles;
+            Vector3 TargetPosition = CurrentPoint.transform.position;
+            Vector3 TargetRotation = CurrentPoint.transform.eulerAngles;
+            float Orix = AbsAngle(OriRotation.x);
+            float Oriy = AbsAngle(OriRotation.y);
+            float Oriz = AbsAngle(OriRotation.z);
+            float Targetx = AbsAngle(TargetRotation.x);
+            float Targety = AbsAngle(TargetRotation.y);
+            float Targetz = AbsAngle(TargetRotation.z);
+            float t = TransitTime;
+            while (t > Time.deltaTime + 0.01f)
+            {
+                float Scale = t / TransitTime;
+                transform.position = OriPosition + (TargetPosition - OriPosition) * Scale;
+                
+                transform.eulerAngles = new Vector3(Mathf.LerpAngle(transform.eulerAngles.x, CurrentPoint.transform.eulerAngles.x, t * Time.deltaTime),
+                    Mathf.LerpAngle(transform.eulerAngles.y, CurrentPoint.transform.eulerAngles.y, t * Time.deltaTime),
+                    Mathf.LerpAngle(transform.eulerAngles.z, CurrentPoint.transform.eulerAngles.z, t * Time.deltaTime));
+                MainCamera.fieldOfView = Mathf.Lerp(MainCamera.fieldOfView, CurrentPoint.ViewField, t * Time.deltaTime);
+                t -= Time.deltaTime;
+                yield return 0;
+            }
+            Animating = false;
         }
 
         public static float AbsAngle(float Value)

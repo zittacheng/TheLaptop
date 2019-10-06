@@ -68,10 +68,14 @@
     <Compile Include="Assets\Script\Button.cs" />
     <Compile Include="Assets\Script\ButtonCreator.cs" />
     <Compile Include="Assets\Script\CameraControl.cs" />
+    <Compile Include="Assets\Script\CameraPoint.cs" />
     <Compile Include="Assets\Script\CombatControl.cs" />
     <Compile Include="Assets\Script\Cursor.cs" />
     <Compile Include="Assets\Script\EnergyBar.cs" />
+    <Compile Include="Assets\Script\LaptopControl.cs" />
+    <Compile Include="Assets\Script\MainCharacterControl.cs" />
     <Compile Include="Assets\Script\MenuButton.cs" />
+    <Compile Include="Assets\Script\MovementControl.cs" />
     <Compile Include="Assets\Script\Process.cs" />
     <Compile Include="Assets\Script\ProcessButton.cs" />
     <Compile Include="Assets\Script\UIControl.cs" />
