@@ -16,8 +16,19 @@ namespace LAP
         public GameObject RotationObject;
         public CameraPoint MovementPoint;
         public CameraPoint LaptopPoint;
+        public Animator FadeAnim;
+        public GameObject AimDot;
+        public GameObject GroundRayPoint;
+        public LayerMask GroundRayMask;
         [Space]
+        public Cube SelectingCube;
+        public Cube LastCube;
+        public float CubeRange;
+        public LayerMask CubeRayMask;
+        [Space]
+        public Cube PlatformCube;
         public bool LaptopActive;
+        public bool OnGround;
         [Space]
         public float AnimValue;
         public bool Animating;
@@ -25,6 +36,8 @@ namespace LAP
         public void Awake()
         {
             Main = this;
+            UnityEngine.Cursor.visible = false;
+            UnityEngine.Cursor.lockState = CursorLockMode.None;
         }
 
         // Start is called before the first frame update
@@ -38,13 +51,72 @@ namespace LAP
         {
             RotationUpdate();
 
-            if (!Animating && Input.GetKeyDown(KeyCode.Q))
-                LaptopMode(!LaptopActive);
+            if (!LaptopActive)
+            {
+                Ray CR = new Ray(MovementPoint.transform.position, MovementPoint.transform.forward);
+                Debug.DrawRay(CR.origin, CR.direction, Color.green);
+                if (Physics.Raycast(CR, out RaycastHit SHit, CubeRange, CubeRayMask) && SHit.transform.GetComponent<Cube>() != PlatformCube)
+                    SelectingCube = SHit.transform.GetComponent<Cube>();
+                else
+                    SelectingCube = null;
+            }
+
+            if (SelectingCube != LastCube)
+            {
+                if (SelectingCube)
+                    SelectingCube.Select();
+                if (LastCube)
+                    LastCube.UnSelect();
+                LastCube = SelectingCube;
+            }
+
+            if (OnGround && !Animating)
+            {
+                if (!LaptopActive && (Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(0)) && SelectingCube && SelectingCube.CanEdit())
+                    LaptopMode(true);
+                else if (LaptopActive && (Input.GetMouseButtonDown(1) || !OnGround))
+                    LaptopMode(false);
+            }
+
+            Ray R = new Ray(GroundRayPoint.transform.position, Vector3.down);
+            Debug.DrawRay(R.origin, R.direction * 0.1f, Color.green);
+            if (Physics.Raycast(R, out RaycastHit Hit, 0.1f, GroundRayMask))
+            {
+                OnGround = true;
+                if (Hit.transform.GetComponent<Cube>())
+                    PlatformCube = Hit.transform.GetComponent<Cube>();
+            }
+            else
+            {
+                OnGround = false;
+                PlatformCube = null;
+            }
+
+            AimDot.SetActive(!Stasis());
         }
 
         public void FixedUpdate()
         {
             RotationUpdate();
+        }
+
+        public void SetSpeed(Vector3 Value)
+        {
+            if (PlatformCube)
+                Value += PlatformCube.Rig.velocity;
+            Rig.velocity = Value;
+        }
+
+        public void OnTriggerEnter(Collider C)
+        {
+            if (C.GetComponent<CubeCharacterDetection>())
+                C.GetComponent<CubeCharacterDetection>().Detected = true;
+        }
+
+        public void OnTriggerExit(Collider C)
+        {
+            if (C.GetComponent<CubeCharacterDetection>())
+                C.GetComponent<CubeCharacterDetection>().Detected = false;
         }
 
         public void RotationUpdate()
@@ -59,15 +131,30 @@ namespace LAP
             if (On)
             {
                 MovControl.LaptopOn();
-                LapControl.LaptopOn();
-                CameraControl.Main.SetPoint(LaptopPoint, 0.8f);
+                UnityEngine.Cursor.lockState = CursorLockMode.None;
+                Cursor.Main.SetAnim(true);
             }
             else
             {
+                Cursor.Main.SetAnim(false);
+                UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+                if (SelectingCube)
+                    SelectingCube.Exe();
                 MovControl.LaptopOff();
-                LapControl.LaptopOff();
-                CameraControl.Main.SetPoint(MovementPoint, 0.8f);
             }
+        }
+
+        public IEnumerator CursorActivate()
+        {
+            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+            yield return 0;
+            UnityEngine.Cursor.lockState = CursorLockMode.None;
+            Cursor.Main.SetAnim(true);
+        }
+
+        public bool Stasis()
+        {
+            return LaptopActive || Animating;
         }
     }
 }

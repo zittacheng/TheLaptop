@@ -7,9 +7,10 @@ namespace LAP
     public class UIControl : MonoBehaviour {
         [HideInInspector]
         public static UIControl Main;
-        public bool AppMode;
-        public AppRenderer AR;
-        public GameObject Menu;
+        [Space]
+        [HideInInspector] public bool AppMode;
+        [HideInInspector] public AppRenderer AR;
+        [HideInInspector] public GameObject Menu;
 
         private void Awake()
         {
@@ -24,6 +25,11 @@ namespace LAP
 
         // Update is called once per frame
         void Update()
+        {
+
+        }
+
+        public void LegacyUpdate()
         {
             if (!AppMode)
             {

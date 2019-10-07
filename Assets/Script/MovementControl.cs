@@ -27,18 +27,20 @@ namespace LAP
         {
             if (!Active)
             {
-                Rig.velocity = new Vector3(0, 0, 0);
+                MainCharacterControl.Main.SetSpeed(new Vector3(0, Rig.velocity.y, 0));
                 return;
             }
 
+            Vector3 Speed = Rig.velocity;
             float y = Rig.velocity.y;
-            Rig.velocity = HorizontalPivot.transform.TransformDirection(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-            Rig.velocity.Normalize();
-            Rig.velocity *= MovementSpeed;
-            if (Input.GetKeyDown(KeyCode.Space))
-                Rig.velocity = new Vector3(Rig.velocity.x, JumpSpeed, Rig.velocity.z);
+            Speed = HorizontalPivot.transform.TransformDirection(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            Speed.Normalize();
+            Speed *= MovementSpeed;
+            if (Input.GetKeyDown(KeyCode.Space) && MainCharacterControl.Main.OnGround)
+                Speed = new Vector3(Speed.x, JumpSpeed, Speed.z);
             else
-                Rig.velocity = new Vector3(Rig.velocity.x, y, Rig.velocity.z);
+                Speed = new Vector3(Speed.x, y, Speed.z);
+            MainCharacterControl.Main.SetSpeed(Speed);
         }
 
         public void FixedUpdate()
@@ -65,34 +67,11 @@ namespace LAP
 
         public void LaptopOn()
         {
-            StartCoroutine("LaptopOnIE");
-        }
-
-        public IEnumerator LaptopOnIE()
-        {
             Active = false;
-            yield return 0;
-            /*float OriX = AbsAngle(VerticalPivot.transform.localEulerAngles.x);
-            float x = OriX;
-            float A = MainCharacterControl.Main.AnimValue;
-            while (A < 1)
-            {
-                x = OriX * (1 - A);
-                yield return 0;
-                VerticalPivot.transform.localEulerAngles = new Vector3(x, 0, 0);
-                A = MainCharacterControl.Main.AnimValue;
-            }
-            VerticalPivot.transform.localEulerAngles = new Vector3(0, 0, 0);*/
         }
 
         public void LaptopOff()
         {
-            StartCoroutine("LaptopOffIE");
-        }
-
-        public IEnumerator LaptopOffIE()
-        {
-            yield return 0;
             Active = true;
         }
 

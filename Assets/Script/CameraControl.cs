@@ -58,6 +58,7 @@ namespace LAP
 
         public IEnumerator TransitToPoint()
         {
+            /*
             Vector3 OriPosition = transform.position;
             Vector3 OriRotation = transform.eulerAngles;
             Vector3 TargetPosition = CurrentPoint.transform.position;
@@ -81,6 +82,8 @@ namespace LAP
                 t -= Time.deltaTime;
                 yield return 0;
             }
+            Animating = false;*/
+            yield return new WaitForSeconds(TransitTime);
             Animating = false;
         }
 

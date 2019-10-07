@@ -7,6 +7,7 @@ namespace LAP
     public class Cursor : MonoBehaviour {
         public static Cursor Main;
         public Camera PositionCamera;
+        public GameObject AnimBase;
 
         public void Awake()
         {
@@ -46,6 +47,11 @@ namespace LAP
         {
             if (C.GetComponent<Button>())
                 C.GetComponent<Button>().Active = false;
+        }
+
+        public void SetAnim(bool Active)
+        {
+            AnimBase.SetActive(Active);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace LAP
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetMouseButtonDown(0) && Active)
+            if (Input.GetMouseButtonDown(0) && Active && MainCharacterControl.Main.LaptopActive && !MainCharacterControl.Main.Animating)
                 Effect();
         }
 
