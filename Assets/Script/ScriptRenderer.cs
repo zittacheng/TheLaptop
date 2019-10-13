@@ -61,7 +61,7 @@ namespace LAP
             }
 
             Script S = C.Scripts[Index];
-            if (S != CurrentScript)
+            if (S != CurrentScript || !MainCharacterControl.Main.Stasis())
                 Render(S);
             CurrentScript = S;
 

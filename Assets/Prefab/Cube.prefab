@@ -237,8 +237,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5500857431514948004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -3, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_Children:
   - {fileID: 5001052015724425143}
   - {fileID: 7565026273861232127}
@@ -323,7 +323,13 @@ MonoBehaviour:
   CurrentMoveDirection: {x: 0, y: 0, z: 0}
   MaxRestTime: 1
   CurrentRestTime: {x: 0, y: 0, z: 0}
+  LoopTime: 0
+  CurrentLoopTime: 0
+  Col: {fileID: 5500857431514948005}
   CharacterDetection: {fileID: 959882481610114405}
+  Locked: 0
+  Solid: 1
+  Colliding: 0
   Processing: 0
   Animating: 0
 --- !u!1 &7359504981175867090
@@ -402,7 +408,7 @@ GameObject:
   - component: {fileID: 8660349512411193690}
   - component: {fileID: 4715926547512531694}
   - component: {fileID: 959882481610114405}
-  m_Layer: 12
+  m_Layer: 15
   m_Name: CharacterDetection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -506,6 +512,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.02
+      objectReference: {fileID: 0}
     - target: {fileID: 7312022846618939196, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
         type: 3}
       propertyPath: Point0
@@ -515,11 +526,6 @@ PrefabInstance:
         type: 3}
       propertyPath: Point1
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
-        type: 3}
-      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
-      value: 0.02
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c37d8faea8aaa74f8c6c0918038fca8, type: 3}
@@ -580,21 +586,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_RootOrder
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7312022846618939196, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
-        type: 3}
-      propertyPath: Point0
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7312022846618939196, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
-        type: 3}
-      propertyPath: Point1
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
-        type: 3}
-      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
-      value: 0.02
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c37d8faea8aaa74f8c6c0918038fca8, type: 3}
@@ -661,6 +652,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.x
       value: -90
       objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.02
+      objectReference: {fileID: 0}
     - target: {fileID: 7312022846618939196, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
         type: 3}
       propertyPath: Point0
@@ -670,11 +666,6 @@ PrefabInstance:
         type: 3}
       propertyPath: Point1
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
-        type: 3}
-      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
-      value: 0.02
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c37d8faea8aaa74f8c6c0918038fca8, type: 3}
@@ -741,6 +732,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: -90
       objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.g
+      value: 0.41999993
+      objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.b
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key1.g
+      value: 0.41999993
+      objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key1.b
+      value: 0.7
+      objectReference: {fileID: 0}
     - target: {fileID: 7312022846618939196, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
         type: 3}
       propertyPath: Point0
@@ -750,11 +766,6 @@ PrefabInstance:
         type: 3}
       propertyPath: Point1
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
-        type: 3}
-      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
-      value: 0.02
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c37d8faea8aaa74f8c6c0918038fca8, type: 3}
@@ -821,6 +832,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: -90
       objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.02
+      objectReference: {fileID: 0}
     - target: {fileID: 7312022846618939196, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
         type: 3}
       propertyPath: Point0
@@ -830,11 +846,6 @@ PrefabInstance:
         type: 3}
       propertyPath: Point1
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
-        type: 3}
-      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
-      value: 0.02
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c37d8faea8aaa74f8c6c0918038fca8, type: 3}
@@ -901,6 +912,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.x
       value: -90
       objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.02
+      objectReference: {fileID: 0}
     - target: {fileID: 7312022846618939196, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
         type: 3}
       propertyPath: Point0
@@ -910,11 +926,6 @@ PrefabInstance:
         type: 3}
       propertyPath: Point1
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
-        type: 3}
-      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
-      value: 0.02
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c37d8faea8aaa74f8c6c0918038fca8, type: 3}
@@ -981,6 +992,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.x
       value: -90
       objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.02
+      objectReference: {fileID: 0}
     - target: {fileID: 7312022846618939196, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
         type: 3}
       propertyPath: Point0
@@ -990,11 +1006,6 @@ PrefabInstance:
         type: 3}
       propertyPath: Point1
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
-        type: 3}
-      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
-      value: 0.02
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c37d8faea8aaa74f8c6c0918038fca8, type: 3}
@@ -1061,6 +1072,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.x
       value: -90
       objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.02
+      objectReference: {fileID: 0}
     - target: {fileID: 7312022846618939196, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
         type: 3}
       propertyPath: Point0
@@ -1070,11 +1086,6 @@ PrefabInstance:
         type: 3}
       propertyPath: Point1
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
-        type: 3}
-      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
-      value: 0.02
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c37d8faea8aaa74f8c6c0918038fca8, type: 3}
@@ -1141,6 +1152,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.02
+      objectReference: {fileID: 0}
     - target: {fileID: 7312022846618939196, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
         type: 3}
       propertyPath: Point0
@@ -1150,11 +1166,6 @@ PrefabInstance:
         type: 3}
       propertyPath: Point1
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
-        type: 3}
-      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
-      value: 0.02
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c37d8faea8aaa74f8c6c0918038fca8, type: 3}
@@ -1221,6 +1232,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.g
+      value: 0.41999993
+      objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.b
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key1.g
+      value: 0.41999993
+      objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key1.b
+      value: 0.7
+      objectReference: {fileID: 0}
     - target: {fileID: 7312022846618939196, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
         type: 3}
       propertyPath: Point0
@@ -1230,11 +1266,6 @@ PrefabInstance:
         type: 3}
       propertyPath: Point1
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
-        type: 3}
-      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
-      value: 0.02
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c37d8faea8aaa74f8c6c0918038fca8, type: 3}
@@ -1296,6 +1327,11 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.02
+      objectReference: {fileID: 0}
     - target: {fileID: 7312022846618939196, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
         type: 3}
       propertyPath: Point0
@@ -1305,11 +1341,6 @@ PrefabInstance:
         type: 3}
       propertyPath: Point1
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
-        type: 3}
-      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
-      value: 0.02
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c37d8faea8aaa74f8c6c0918038fca8, type: 3}
@@ -1376,6 +1407,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.g
+      value: 0.41999993
+      objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.b
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key1.g
+      value: 0.41999993
+      objectReference: {fileID: 0}
+    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key1.b
+      value: 0.7
+      objectReference: {fileID: 0}
     - target: {fileID: 7312022846618939196, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
         type: 3}
       propertyPath: Point0
@@ -1385,11 +1441,6 @@ PrefabInstance:
         type: 3}
       propertyPath: Point1
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8545647271329302947, guid: 5c37d8faea8aaa74f8c6c0918038fca8,
-        type: 3}
-      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
-      value: 0.02
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c37d8faea8aaa74f8c6c0918038fca8, type: 3}

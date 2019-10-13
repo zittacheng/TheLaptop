@@ -8,6 +8,7 @@ namespace LAP
         public GameObject X;
         public GameObject Y;
         public GameObject Z;
+        public GameObject V;
 
         // Start is called before the first frame update
         void Start()
@@ -31,6 +32,8 @@ namespace LAP
             X.transform.forward = Vector3.right;
             Y.transform.forward = Vector3.up;
             Z.transform.forward = Vector3.forward;
+            if (VictoryCube.Main)
+                V.transform.forward = VictoryCube.Main.transform.position - V.transform.position;
         }
     }
 }

@@ -23,15 +23,22 @@ namespace LAP
         public float MaxRestTime;
         public Vector3 CurrentRestTime;
         [Space]
+        public float LoopTime;
+        public float CurrentLoopTime;
+        [Space]
+        public Collider Col;
         public CubeCharacterDetection CharacterDetection;
         [Space]
+        public bool Locked;
+        public bool Solid;
+        public bool Colliding;
         public bool Processing;
         public bool Animating;
 
         public void Awake()
         {
             Ini();
-            Exe();
+            //Exe(false);
         }
 
         public void Ini()
@@ -48,6 +55,12 @@ namespace LAP
         // Update is called once per frame
         void Update()
         {
+            if (!Solid)
+                Col.isTrigger = true;
+            else if (!Colliding)
+                Col.isTrigger = false;
+            
+
             if (MainCharacterControl.Main.Stasis() || Animating)
             {
                 Rig.velocity = new Vector3();
@@ -55,6 +68,10 @@ namespace LAP
             }
 
             CurrentRestTime -= new Vector3(1, 1, 1) * Time.deltaTime;
+            CurrentLoopTime -= Time.deltaTime;
+            if (LoopTime > 0 && CurrentLoopTime <= 0)
+                Exe(true);
+
             if (MoveTime.x != 0 && CurrentRestTime.x <= 0)
             {
                 if (CurrentMoveDirection.x == 1)
@@ -169,46 +186,71 @@ namespace LAP
             transform.Translate(Rig.velocity * Time.fixedDeltaTime);
         }
 
-        public void Exe()
+        public void OnSelect()
+        {
+            foreach (Script S in Scripts)
+                SelectScript(S, S.Command, S.Value);
+        }
+
+        public void SelectScript(Script S, string Command, string Value)
+        {
+            if (Command == "MoveX" || Command == "MoveY" || Command == "MoveZ")
+            {
+                if (float.TryParse(Value, out float a))
+                    S.Value = "";
+            }
+        }
+
+        public void Exe(bool Auto)
         {
             Processing = true;
             PreExe();
-            StartCoroutine("ExeIE");
+            StartCoroutine(ExeIE(Auto));
         }
 
         public void PreExe()
         {
             MoveTime = new Vector3();
+            LoopTime = 0;
         }
 
-        public IEnumerator ExeIE()
+        public IEnumerator ExeIE(bool Auto)
         {
             foreach (Script S in Scripts)
             {
                 if (S)
-                    yield return ExeScript(S.Command, S.Value);
+                    yield return ExeScript(S, S.Command, S.Value, Auto);
             }
             yield return ExeFinal();
         }
 
-        public IEnumerator ExeScript(string Command, string Value)
+        public IEnumerator ExeScript(Script S, string Command, string Value, bool Auto)
         {
-            if (Command == "PositionX")
+            if (Command == "MoveX")
             {
                 if (float.TryParse(Value, out float a))
-                    yield return PositionChangeIE(new Vector3(a * 5, transform.position.y, transform.position.z));
+                    yield return PositionChangeIE(transform.position + new Vector3(a * 1, 0, 0));
             }
-            else if (Command == "PositionY")
+            else if (Command == "MoveY")
             {
                 if (float.TryParse(Value, out float a))
-                    yield return PositionChangeIE(new Vector3(transform.position.x, a * 5, transform.position.z));
+                    yield return PositionChangeIE(transform.position + new Vector3(0, a * 1, 0));
             }
-            else if (Command == "PositionZ")
+            else if (Command == "MoveZ")
             {
                 if (float.TryParse(Value, out float a))
-                    yield return PositionChangeIE(new Vector3(transform.position.x, transform.position.y, a * 5));
+                {
+                    Animating = true;
+                    yield return PositionChangeIE(transform.position + new Vector3(0, 0, a * 1));
+                    Animating = false;
+                }
             }
-            else if (Command == "MoveX")
+            else if (Command == "Delay")
+            {
+                if (float.TryParse(Value, out float a))
+                    yield return new WaitForSeconds(a);
+            }
+            else if (Command == "Move_LegacyX")
             {
                 if (float.TryParse(Value, out float a))
                 {
@@ -220,7 +262,7 @@ namespace LAP
                     }
                 }
             }
-            else if (Command == "MoveY")
+            else if (Command == "Move_LegacyY")
             {
                 if (float.TryParse(Value, out float a))
                 {
@@ -232,7 +274,7 @@ namespace LAP
                     }
                 }
             }
-            else if (Command == "MoveZ")
+            else if (Command == "Move_LegacyZ")
             {
                 if (float.TryParse(Value, out float a))
                 {
@@ -242,6 +284,16 @@ namespace LAP
                         CurrentMoveTime.z = MoveTime.z;
                         CurrentMoveDirection.z = 1;
                     }
+                }
+            }
+            else if (Command == "LoopDelay")
+            {
+                if (float.TryParse(Value, out float a))
+                {
+                    LoopTime = a;
+                    if (LoopTime < 0.1f)
+                        LoopTime = 0.1f;
+                    CurrentLoopTime = LoopTime;
                 }
             }
         }
@@ -255,6 +307,7 @@ namespace LAP
         public IEnumerator PositionChangeIE(Vector3 Position)
         {
             Animating = true;
+            Solid = false;
             if ((Position - transform.position).magnitude <= 0.1f)
             {
                 transform.position = Position;
@@ -271,6 +324,7 @@ namespace LAP
                 }
                 transform.position = Position;
             }
+            Solid = true;
             Animating = false;
         }
 
@@ -308,7 +362,7 @@ namespace LAP
 
         public bool CanEdit()
         {
-            return !Processing;
+            return !Processing && !Animating && !Locked;
         }
     }
 }

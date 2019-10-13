@@ -53,7 +53,7 @@ namespace LAP
 
             if (!LaptopActive)
             {
-                Ray CR = new Ray(MovementPoint.transform.position, MovementPoint.transform.forward);
+                Ray CR = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
                 Debug.DrawRay(CR.origin, CR.direction, Color.green);
                 if (Physics.Raycast(CR, out RaycastHit SHit, CubeRange, CubeRayMask) && SHit.transform.GetComponent<Cube>() != PlatformCube)
                     SelectingCube = SHit.transform.GetComponent<Cube>();
@@ -111,12 +111,18 @@ namespace LAP
         {
             if (C.GetComponent<CubeCharacterDetection>())
                 C.GetComponent<CubeCharacterDetection>().Detected = true;
+            if (C.GetComponent<CheckPoint>())
+                C.GetComponent<CheckPoint>().SetActive();
+            if (C.GetComponent<Cube>())
+                C.GetComponent<Cube>().Colliding = true;
         }
 
         public void OnTriggerExit(Collider C)
         {
             if (C.GetComponent<CubeCharacterDetection>())
                 C.GetComponent<CubeCharacterDetection>().Detected = false;
+            if (C.GetComponent<Cube>())
+                C.GetComponent<Cube>().Colliding = false;
         }
 
         public void RotationUpdate()
@@ -127,21 +133,32 @@ namespace LAP
         public void LaptopMode(bool On)
         {
             Anim.SetBool("LaptopMode", On);
-            LaptopActive = On;
             if (On)
             {
+                if (SelectingCube)
+                    SelectingCube.OnSelect();
                 MovControl.LaptopOn();
                 UnityEngine.Cursor.lockState = CursorLockMode.None;
                 Cursor.Main.SetAnim(true);
+                StartCoroutine("DelayLaptopOn");
             }
             else
             {
+                LaptopActive = false;
                 Cursor.Main.SetAnim(false);
                 UnityEngine.Cursor.lockState = CursorLockMode.Locked;
                 if (SelectingCube)
-                    SelectingCube.Exe();
+                    SelectingCube.Exe(false);
                 MovControl.LaptopOff();
             }
+        }
+
+        public IEnumerator DelayLaptopOn()
+        {
+            yield return 0;
+            yield return 0;
+            yield return 0;
+            LaptopActive = true;
         }
 
         public IEnumerator CursorActivate()
@@ -150,6 +167,11 @@ namespace LAP
             yield return 0;
             UnityEngine.Cursor.lockState = CursorLockMode.None;
             Cursor.Main.SetAnim(true);
+        }
+
+        public void SetPosition(Vector3 Value)
+        {
+            transform.position = Value;
         }
 
         public bool Stasis()
