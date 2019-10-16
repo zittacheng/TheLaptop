@@ -6,7 +6,7 @@ namespace LAP
 {
     public class Cube : MonoBehaviour {
         public GameObject SelectingBase;
-        public Rigidbody Rig;
+        //public Rigidbody Rig;
         public List<Script> Scripts;
         [HideInInspector]
         public int ScriptIndex;
@@ -83,17 +83,19 @@ namespace LAP
                 }
             }
 
+            /*
             if (MainCharacterControl.Main.Stasis() || Animating)
             {
                 Rig.velocity = new Vector3();
                 return;
-            }
+            }*/
 
-            CurrentRestTime -= new Vector3(1, 1, 1) * Time.deltaTime;
+            //CurrentRestTime -= new Vector3(1, 1, 1) * Time.deltaTime;
             CurrentLoopTime -= Time.deltaTime;
             if (LoopTime > 0 && CurrentLoopTime <= 0)
                 Exe(true);
 
+            /*
             if (MoveTime.x != 0 && CurrentRestTime.x <= 0)
             {
                 if (CurrentMoveDirection.x == 1)
@@ -200,12 +202,12 @@ namespace LAP
                 }
             }
             else
-                Rig.velocity = new Vector3(Rig.velocity.x, Rig.velocity.y, 0);
+                Rig.velocity = new Vector3(Rig.velocity.x, Rig.velocity.y, 0);*/
         }
 
         public void FixedUpdate()
         {
-            transform.Translate(Rig.velocity * Time.fixedDeltaTime);
+            //transform.Translate(Rig.velocity * Time.fixedDeltaTime);
         }
 
         public void OnSelect()
@@ -414,6 +416,8 @@ namespace LAP
                 }
                 C.transform.position = Position;
             }
+            if (Mathf.Abs(C.transform.position.x) > 1000 || Mathf.Abs(C.transform.position.y) > 1000 || Mathf.Abs(C.transform.position.z) > 1000)
+                Destroy(C.gameObject);
             C.Solid = true;
             yield return new WaitForSeconds(0.2f);
             C.Animating = false;

@@ -221,7 +221,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5500857431514948008}
   - component: {fileID: 5500857431514948005}
-  - component: {fileID: 5500857431514948009}
   - component: {fileID: 1543387028909893536}
   m_Layer: 12
   m_Name: Cube
@@ -260,22 +259,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &5500857431514948009
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5500857431514948004}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: Infinity
-  m_AngularDrag: Infinity
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 3
 --- !u!114 &1543387028909893536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,8 +272,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SelectingBase: {fileID: 7359504981175867090}
-  Rig: {fileID: 5500857431514948009}
+  Rig: {fileID: 0}
   Scripts: []
+  ScriptIndex: 0
   AlterPositions: []
   MaxAPTime: 0.6
   APTime: 0
@@ -335,6 +319,8 @@ MonoBehaviour:
   Colliding: 0
   Processing: 0
   Animating: 0
+  AlreadyEdited: 0
+  Death: 0
 --- !u!1 &6927977323135382278
 GameObject:
   m_ObjectHideFlags: 0

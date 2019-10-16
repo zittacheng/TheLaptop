@@ -108,8 +108,9 @@ namespace LAP
 
         public void SetSpeed(Vector3 Value)
         {
+            /*
             if (PlatformCube)
-                Value += PlatformCube.Rig.velocity;
+                Value += PlatformCube.Rig.velocity;*/
             Rig.velocity = Value;
         }
 

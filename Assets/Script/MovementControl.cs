@@ -17,6 +17,15 @@ namespace LAP
         public float RotationSpeed;
         public Vector2 VerticalAngleLimit;
 
+        public void Awake()
+        {
+            if (Level.Main.OverrideSpawn)
+            {
+                transform.position = Level.Main.OverrideSpawn.transform.position;
+                HorizontalPivot.transform.eulerAngles = new Vector3(0, Level.Main.OverrideSpawn.transform.eulerAngles.y, 0);
+            }
+        }
+
         // Start is called before the first frame update
         void Start()
         {
@@ -48,13 +57,12 @@ namespace LAP
         {
             HorizontalPivot.transform.eulerAngles = new Vector3(0, HorizontalPivot.transform.eulerAngles.y, 0);
 
-            if (Rig.velocity.y < -80f)
-                Rig.velocity = new Vector3(Rig.velocity.x, -80f, Rig.velocity.z);
+            if (Rig.velocity.y < -50f)
+                Rig.velocity = new Vector3(Rig.velocity.x, -50f, Rig.velocity.z);
 
-            if (transform.position.y <= -300f)
+            if (transform.position.y <= -150f)
             {
-                transform.position = ThatControl.Main.RespawnPoint.transform.position;
-                Rig.velocity = new Vector3(0, Rig.velocity.y, 0);
+                ThatControl.Main.CharacterReset();
             }
 
             if (!Active || AlreadyDead)
@@ -74,6 +82,12 @@ namespace LAP
                 VerticalPivot.transform.localEulerAngles = 
                     new Vector3(VerticalAngleLimit.x, VerticalPivot.transform.localEulerAngles.y, VerticalPivot.transform.localEulerAngles.z);
             }
+        }
+
+        public void RealReset()
+        {
+            transform.position = ThatControl.Main.RespawnPoint.transform.position;
+            Rig.velocity = new Vector3(0, Rig.velocity.y, 0);
         }
 
         public void LaptopOn()

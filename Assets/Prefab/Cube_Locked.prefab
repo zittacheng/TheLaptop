@@ -133,7 +133,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3942657187253386459}
   - component: {fileID: 3942657187253386454}
-  - component: {fileID: 3942657187253386458}
   - component: {fileID: 8037499481580272339}
   m_Layer: 10
   m_Name: Cube_Locked
@@ -172,22 +171,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &3942657187253386458
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3942657187253386455}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: Infinity
-  m_AngularDrag: Infinity
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 3
 --- !u!114 &8037499481580272339
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,8 +184,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SelectingBase: {fileID: 2072763772536114081}
-  Rig: {fileID: 3942657187253386458}
+  Rig: {fileID: 0}
   Scripts: []
+  ScriptIndex: 0
   AlterPositions: []
   MaxAPTime: 0.6
   APTime: 0
@@ -240,11 +224,15 @@ MonoBehaviour:
   CurrentLoopTime: 0
   Col: {fileID: 3942657187253386454}
   CharacterDetection: {fileID: 8625494356957665302}
+  SolidObject: {fileID: 0}
+  TriggerObject: {fileID: 0}
   Locked: 1
   Solid: 1
   Colliding: 0
   Processing: 0
   Animating: 0
+  AlreadyEdited: 0
+  Death: 0
 --- !u!1 &4073908308157275769
 GameObject:
   m_ObjectHideFlags: 0

@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Assets\Script\App.cs" />
     <Compile Include="Assets\Script\AppRenderer.cs" />
+    <Compile Include="Assets\Script\AutoRotate.cs" />
     <Compile Include="Assets\Script\AxisRenderer.cs" />
     <Compile Include="Assets\Script\BackButton.cs" />
     <Compile Include="Assets\Script\Button.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Assets\Script\ButtonCreator.cs" />
     <Compile Include="Assets\Script\CameraControl.cs" />
     <Compile Include="Assets\Script\CameraPoint.cs" />
+    <Compile Include="Assets\Script\ChallengeRenderer.cs" />
     <Compile Include="Assets\Script\CheckPoint.cs" />
     <Compile Include="Assets\Script\CombatControl.cs" />
     <Compile Include="Assets\Script\Cube.cs" />

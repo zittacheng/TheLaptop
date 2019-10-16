@@ -11,6 +11,7 @@ namespace LAP
         public string NextLevelKey;
         public GameObject Base;
         [Space]
+        public GameObject OverrideSpawn;
         public int ChallengeCount;
         [TextArea]
         public string OverrideHelp;

@@ -13,13 +13,16 @@ namespace LAP
         public GameObject OpenBase;
         public GameObject AxisRenderer;
         public List<Cube> Opens;
+        public Animator ResetAnim;
         public GameObject RespawnPoint;
         public Animator FinaleAnim;
         [Space]
         public Animator SceneFade;
         public string CurrentSceneName;
+        [Space]
         public bool AlreadyLoading;
         public bool AlreadyWin;
+        public bool AlreadyResetting;
 
         private void Awake()
         {
@@ -74,6 +77,22 @@ namespace LAP
                 return;
             AlreadyLoading = true;
             StartCoroutine("LoadScene");
+        }
+
+        public void CharacterReset()
+        {
+            if (AlreadyResetting)
+                return;
+            AlreadyResetting = true;
+            StartCoroutine("CharacterResetIE");
+        }
+
+        public IEnumerator CharacterResetIE()
+        {
+            ResetAnim.SetTrigger("Play");
+            yield return new WaitForSeconds(0.48f);
+            MainCharacterControl.Main.MovControl.RealReset();
+            AlreadyResetting = false;
         }
 
         public void Finale()
