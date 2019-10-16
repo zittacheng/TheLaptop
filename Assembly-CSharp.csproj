@@ -69,7 +69,11 @@
     <Compile Include="Assets\Script\Button.cs" />
     <Compile Include="Assets\Script\Button_AddScript.cs" />
     <Compile Include="Assets\Script\Button_InputField.cs" />
+    <Compile Include="Assets\Script\Button_NextLevel.cs" />
+    <Compile Include="Assets\Script\Button_ObjectChange.cs" />
+    <Compile Include="Assets\Script\Button_Open.cs" />
     <Compile Include="Assets\Script\Button_RemoveScript.cs" />
+    <Compile Include="Assets\Script\Button_Retry.cs" />
     <Compile Include="Assets\Script\ButtonCreator.cs" />
     <Compile Include="Assets\Script\CameraControl.cs" />
     <Compile Include="Assets\Script\CameraPoint.cs" />
@@ -78,8 +82,12 @@
     <Compile Include="Assets\Script\Cube.cs" />
     <Compile Include="Assets\Script\CubeCharacterDetection.cs" />
     <Compile Include="Assets\Script\Cursor.cs" />
+    <Compile Include="Assets\Script\EditCountRenderer.cs" />
     <Compile Include="Assets\Script\EnergyBar.cs" />
+    <Compile Include="Assets\Script\HelpRenderer.cs" />
+    <Compile Include="Assets\Script\HelpTextRenderer.cs" />
     <Compile Include="Assets\Script\LaptopControl.cs" />
+    <Compile Include="Assets\Script\Level.cs" />
     <Compile Include="Assets\Script\LineControl.cs" />
     <Compile Include="Assets\Script\LineFixed.cs" />
     <Compile Include="Assets\Script\MainCharacterControl.cs" />

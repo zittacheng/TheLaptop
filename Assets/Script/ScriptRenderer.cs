@@ -14,6 +14,8 @@ namespace LAP
         public TMP_InputField ValueField;
         public TextMeshProUGUI CommandPlaceholder;
         public TextMeshProUGUI ValuePlaceholder;
+        public TextMeshProUGUI DeathCommandPlaceholder;
+        public TextMeshProUGUI DeathValuePlaceholder;
         public Button AddButton;
         [Space]
         [HideInInspector]
@@ -41,12 +43,9 @@ namespace LAP
 
 
             Cube C = MainCharacterControl.Main.SelectingCube;
-            if (!C)
-                return;
-
-            if (C.Scripts.Count <= Index || !C.Scripts[Index])
+            if (!C || C.Locked || C.Scripts.Count <= Index || !C.Scripts[Index])
             {
-                if (Index <= 0 || (C.Scripts.Count > Index - 1 && C.Scripts[Index - 1]))
+                if (C && !C.Locked && (Index <= 0 || (C.Scripts.Count > Index - 1 && C.Scripts[Index - 1])))
                     AddButton.gameObject.SetActive(true);
                 else
                     AddButton.gameObject.SetActive(false);
@@ -66,13 +65,42 @@ namespace LAP
             CurrentScript = S;
 
             if (CommandField.text == "")
-                CommandPlaceholder.gameObject.SetActive(true);
+            {
+                if (C.Death)
+                {
+                    DeathCommandPlaceholder.gameObject.SetActive(true);
+                    CommandPlaceholder.gameObject.SetActive(false);
+                }
+                else
+                {
+                    CommandPlaceholder.gameObject.SetActive(true);
+                    DeathCommandPlaceholder.gameObject.SetActive(false);
+                }
+            }
             else
+            {
                 CommandPlaceholder.gameObject.SetActive(false);
+                DeathCommandPlaceholder.gameObject.SetActive(false);
+            }
+
             if (ValueField.text == "")
-                ValuePlaceholder.gameObject.SetActive(true);
+            {
+                if (C.Death)
+                {
+                    DeathValuePlaceholder.gameObject.SetActive(true);
+                    ValuePlaceholder.gameObject.SetActive(false);
+                }
+                else
+                {
+                    ValuePlaceholder.gameObject.SetActive(true);
+                    DeathValuePlaceholder.gameObject.SetActive(false);
+                }
+            }
             else
+            {
                 ValuePlaceholder.gameObject.SetActive(false);
+                DeathValuePlaceholder.gameObject.SetActive(false);
+            }
         }
 
         public void Render(Script S)

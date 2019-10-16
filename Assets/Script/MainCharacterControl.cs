@@ -30,8 +30,12 @@ namespace LAP
         public bool LaptopActive;
         public bool OnGround;
         [Space]
+        public int EditCount;
+        [Space]
         public float AnimValue;
         public bool Animating;
+        [HideInInspector]
+        public bool AlreadyWin;
 
         public void Awake()
         {
@@ -70,9 +74,9 @@ namespace LAP
                 LastCube = SelectingCube;
             }
 
-            if (OnGround && !Animating)
+            if (OnGround && !Animating && !AlreadyWin)
             {
-                if (!LaptopActive && (Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(0)) && SelectingCube && SelectingCube.CanEdit())
+                if (!LaptopActive && (Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(0)) && (!SelectingCube || SelectingCube.CanEdit()))
                     LaptopMode(true);
                 else if (LaptopActive && (Input.GetMouseButtonDown(1) || !OnGround))
                     LaptopMode(false);
@@ -85,6 +89,8 @@ namespace LAP
                 OnGround = true;
                 if (Hit.transform.GetComponent<Cube>())
                     PlatformCube = Hit.transform.GetComponent<Cube>();
+                if (Hit.transform.GetComponent<VictoryCube>())
+                    ThatControl.Main.Victory();
             }
             else
             {
@@ -135,7 +141,7 @@ namespace LAP
             Anim.SetBool("LaptopMode", On);
             if (On)
             {
-                if (SelectingCube)
+                if (SelectingCube && SelectingCube.CanEdit() && !SelectingCube.Locked)
                     SelectingCube.OnSelect();
                 MovControl.LaptopOn();
                 UnityEngine.Cursor.lockState = CursorLockMode.None;
@@ -147,8 +153,10 @@ namespace LAP
                 LaptopActive = false;
                 Cursor.Main.SetAnim(false);
                 UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-                if (SelectingCube)
+                if (SelectingCube && SelectingCube.CanEdit() && !SelectingCube.Locked)
                     SelectingCube.Exe(false);
+                if (SelectingCube && !SelectingCube.Locked && ((SelectingCube.Scripts.Count > 0 && !SelectingCube.Empty()) || SelectingCube.AlreadyEdited))
+                    ChangeEditCount(1);
                 MovControl.LaptopOff();
             }
         }
@@ -167,6 +175,11 @@ namespace LAP
             yield return 0;
             UnityEngine.Cursor.lockState = CursorLockMode.None;
             Cursor.Main.SetAnim(true);
+        }
+
+        public void ChangeEditCount(int Value)
+        {
+            EditCount += Value;
         }
 
         public void SetPosition(Vector3 Value)

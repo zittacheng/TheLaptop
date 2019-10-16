@@ -5,8 +5,8 @@ using UnityEngine;
 namespace LAP
 {
     public class SaveControl : MonoBehaviour {
+        [HideInInspector]
         public static SaveControl Main;
-        [Space]
         public List<string> StringKeys;
         public List<string> StringValues;
         [Space]

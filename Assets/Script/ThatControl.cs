@@ -7,6 +7,24 @@ namespace LAP
     public class ThatControl : MonoBehaviour {
         [HideInInspector]
         public static ThatControl Main;
+        public GameObject CubePrefab;
+        public GameObject LaptopBase;
+        public GameObject VictoryBase;
+        public GameObject OpenBase;
+        public GameObject AxisRenderer;
+        public List<Cube> Opens;
+        public GameObject RespawnPoint;
+        public Animator FinaleAnim;
+        [Space]
+        public Animator SceneFade;
+        public string CurrentSceneName;
+        public bool AlreadyLoading;
+        public bool AlreadyWin;
+
+        private void Awake()
+        {
+            Main = this;
+        }
 
         // Start is called before the first frame update
         void Start()
@@ -18,6 +36,69 @@ namespace LAP
         void Update()
         {
 
+        }
+
+        public void Victory()
+        {
+            if (AlreadyWin)
+                return;
+            AlreadyWin = true;
+            if (Level.Main.NextLevelKey != "")
+            {
+                LaptopBase.SetActive(false);
+                VictoryBase.SetActive(true);
+                MainCharacterControl.Main.AlreadyWin = true;
+                MainCharacterControl.Main.LaptopMode(true);
+            }
+            else
+            {
+                LaptopBase.SetActive(false);
+                OpenBase.SetActive(true);
+                MainCharacterControl.Main.LaptopMode(true);
+            }
+        }
+
+        public void Open()
+        {
+            MainCharacterControl.Main.LaptopMode(false);
+            LaptopBase.SetActive(true);
+            OpenBase.SetActive(false);
+            AxisRenderer.SetActive(false);
+            foreach (Cube C in Opens)
+                C.Exe(true);
+        }
+
+        public void Retry()
+        {
+            if (AlreadyLoading)
+                return;
+            AlreadyLoading = true;
+            StartCoroutine("LoadScene");
+        }
+
+        public void Finale()
+        {
+            MainCharacterControl.Main.AlreadyWin = true;
+            MainCharacterControl.Main.MovControl.AlreadyDead = true;
+            MainCharacterControl.Main.LapControl.Active = false;
+            FinaleAnim.SetTrigger("Play");
+        }
+
+        public void NextLevel()
+        {
+            if (AlreadyLoading)
+                return;
+            AlreadyLoading = true;
+            if (Level.Main.NextLevelKey != "")
+                SaveControl.SetString("Level", Level.Main.NextLevelKey);
+            StartCoroutine("LoadScene");
+        }
+
+        public IEnumerator LoadScene()
+        {
+            SceneFade.SetTrigger("Play");
+            yield return new WaitForSeconds(0.52f);
+            UnityEngine.SceneManagement.SceneManager.LoadScene(CurrentSceneName);
         }
     }
 }

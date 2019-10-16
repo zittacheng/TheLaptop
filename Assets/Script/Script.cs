@@ -19,5 +19,15 @@ namespace LAP
         {
 
         }
+
+        public bool Loop()
+        {
+            return Command == "Loop" || Command == "LoopDelay";
+        }
+
+        public bool StartLoop()
+        {
+            return Command == "StartLoop";
+        }
     }
 }

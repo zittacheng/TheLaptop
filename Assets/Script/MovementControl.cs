@@ -6,6 +6,7 @@ namespace LAP
 {
     public class MovementControl : MonoBehaviour {
         public bool Active;
+        public bool AlreadyDead;
         [Space]
         public Rigidbody Rig;
         public float MovementSpeed;
@@ -25,7 +26,7 @@ namespace LAP
         // Update is called once per frame
         void Update()
         {
-            if (!Active)
+            if (!Active || AlreadyDead)
             {
                 MainCharacterControl.Main.SetSpeed(new Vector3(0, Rig.velocity.y, 0));
                 return;
@@ -46,7 +47,17 @@ namespace LAP
         public void FixedUpdate()
         {
             HorizontalPivot.transform.eulerAngles = new Vector3(0, HorizontalPivot.transform.eulerAngles.y, 0);
-            if (!Active)
+
+            if (Rig.velocity.y < -80f)
+                Rig.velocity = new Vector3(Rig.velocity.x, -80f, Rig.velocity.z);
+
+            if (transform.position.y <= -300f)
+            {
+                transform.position = ThatControl.Main.RespawnPoint.transform.position;
+                Rig.velocity = new Vector3(0, Rig.velocity.y, 0);
+            }
+
+            if (!Active || AlreadyDead)
                 return;
 
             float x = -Input.GetAxis("Mouse Y") * RotationSpeed * Time.fixedDeltaTime;

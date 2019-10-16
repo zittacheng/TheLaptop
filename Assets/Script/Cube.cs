@@ -8,6 +8,8 @@ namespace LAP
         public GameObject SelectingBase;
         public Rigidbody Rig;
         public List<Script> Scripts;
+        [HideInInspector]
+        public int ScriptIndex;
         [Space]
         public List<Vector3> AlterPositions;
         public float MaxAPTime;
@@ -28,12 +30,16 @@ namespace LAP
         [Space]
         public Collider Col;
         public CubeCharacterDetection CharacterDetection;
+        public GameObject SolidObject;
+        public GameObject TriggerObject;
         [Space]
         public bool Locked;
         public bool Solid;
         public bool Colliding;
         public bool Processing;
         public bool Animating;
+        public bool AlreadyEdited;
+        public bool Death;
 
         public void Awake()
         {
@@ -55,11 +61,27 @@ namespace LAP
         // Update is called once per frame
         void Update()
         {
+            if (Scripts.Count > 0 && !Empty() && !AlreadyEdited)
+                AlreadyEdited = true;
+
             if (!Solid)
                 Col.isTrigger = true;
             else if (!Colliding)
                 Col.isTrigger = false;
-            
+
+            if (TriggerObject)
+            {
+                if (Col.isTrigger)
+                {
+                    TriggerObject.SetActive(true);
+                    SolidObject.SetActive(false);
+                }
+                else
+                {
+                    TriggerObject.SetActive(false);
+                    SolidObject.SetActive(true);
+                }
+            }
 
             if (MainCharacterControl.Main.Stasis() || Animating)
             {
@@ -196,7 +218,7 @@ namespace LAP
         {
             if (Command == "MoveX" || Command == "MoveY" || Command == "MoveZ")
             {
-                if (float.TryParse(Value, out float a))
+                if (int.TryParse(Value, out int a))
                     S.Value = "";
             }
         }
@@ -212,43 +234,121 @@ namespace LAP
         {
             MoveTime = new Vector3();
             LoopTime = 0;
+            ScriptIndex = 0;
         }
 
         public IEnumerator ExeIE(bool Auto)
         {
+            int StartLoopIndex = 0;
+            int LoopIndex = 0;
             foreach (Script S in Scripts)
             {
                 if (S)
                     yield return ExeScript(S, S.Command, S.Value, Auto);
+                if (S.StartLoop())
+                    StartLoopIndex = ScriptIndex;
+                else if (S.Loop())
+                {
+                    LoopIndex = ScriptIndex;
+                    for (int i = Scripts.Count - 1; i >= LoopIndex; i--)
+                        RemoveScript(i);
+                    for (int i = StartLoopIndex - 1; i >= 0; i--)
+                        RemoveScript(i);
+                    break;
+                }
             }
             yield return ExeFinal();
         }
 
         public IEnumerator ExeScript(Script S, string Command, string Value, bool Auto)
         {
+            ScriptIndex++;
             if (Command == "MoveX")
             {
-                if (float.TryParse(Value, out float a))
-                    yield return PositionChangeIE(transform.position + new Vector3(a * 1, 0, 0));
+                if (int.TryParse(Value, out int a))
+                    yield return PositionChangeIE(transform.position + new Vector3(a * 2, 0, 0), this);
             }
             else if (Command == "MoveY")
             {
-                if (float.TryParse(Value, out float a))
-                    yield return PositionChangeIE(transform.position + new Vector3(0, a * 1, 0));
+                if (int.TryParse(Value, out int a))
+                    yield return PositionChangeIE(transform.position + new Vector3(0, a * 2, 0), this);
             }
             else if (Command == "MoveZ")
             {
-                if (float.TryParse(Value, out float a))
+                if (int.TryParse(Value, out int a))
                 {
                     Animating = true;
-                    yield return PositionChangeIE(transform.position + new Vector3(0, 0, a * 1));
+                    yield return PositionChangeIE(transform.position + new Vector3(0, 0, a * 2), this);
                     Animating = false;
                 }
             }
             else if (Command == "Delay")
             {
-                if (float.TryParse(Value, out float a))
-                    yield return new WaitForSeconds(a);
+                if (int.TryParse(Value, out int a))
+                {
+                    float t = 0;
+                    while (t < a)
+                    {
+                        yield return 0;
+                        if (!MainCharacterControl.Main.Stasis())
+                            t += Time.deltaTime;
+                    }
+                }
+            }
+            else if (Command == "Loop")
+            {
+                LoopTime = 0.1f;
+                CurrentLoopTime = LoopTime;
+                yield return 0;
+            }
+            else if (Command == "LoopDelay")
+            {
+                if (int.TryParse(Value, out int a))
+                    LoopTime = a;
+                else
+                    LoopTime = 0.1f;
+                if (LoopTime < 0.1f)
+                    LoopTime = 0.1f;
+                CurrentLoopTime = LoopTime;
+                yield return 0;
+            }
+            else if (Command == "Instantiate")
+            {
+                GameObject G = Instantiate(ThatControl.Main.CubePrefab);
+                G.transform.position = transform.position;
+                yield return new WaitForSeconds(0.1f);
+            }
+            if (Command == "InstantiateX")
+            {
+                GameObject G = Instantiate(ThatControl.Main.CubePrefab);
+                G.transform.position = transform.position;
+                if (int.TryParse(Value, out int a))
+                    StartCoroutine(PositionChangeIE(transform.position + new Vector3(a * 2, 0, 0), G.GetComponent<Cube>()));
+                yield return new WaitForSeconds(0.1f);
+            }
+            else if (Command == "InstantiateY")
+            {
+                GameObject G = Instantiate(ThatControl.Main.CubePrefab);
+                G.transform.position = transform.position;
+                if (int.TryParse(Value, out int a))
+                    StartCoroutine(PositionChangeIE(transform.position + new Vector3(0, a * 2, 0), G.GetComponent<Cube>()));
+                yield return new WaitForSeconds(0.1f);
+            }
+            else if (Command == "InstantiateZ")
+            {
+                GameObject G = Instantiate(ThatControl.Main.CubePrefab);
+                G.transform.position = transform.position;
+                if (int.TryParse(Value, out int a))
+                    StartCoroutine(PositionChangeIE(transform.position + new Vector3(0, 0, a * 2), G.GetComponent<Cube>()));
+                yield return new WaitForSeconds(0.1f);
+            }
+            else if (Command == "Destroy")
+            {
+                if (Value == "Myself")
+                {
+                    ThatControl.Main.Finale();
+                    yield break;
+                }
             }
             else if (Command == "Move_LegacyX")
             {
@@ -286,16 +386,6 @@ namespace LAP
                     }
                 }
             }
-            else if (Command == "LoopDelay")
-            {
-                if (float.TryParse(Value, out float a))
-                {
-                    LoopTime = a;
-                    if (LoopTime < 0.1f)
-                        LoopTime = 0.1f;
-                    CurrentLoopTime = LoopTime;
-                }
-            }
         }
 
         public IEnumerator ExeFinal()
@@ -304,28 +394,29 @@ namespace LAP
             Processing = false;
         }
 
-        public IEnumerator PositionChangeIE(Vector3 Position)
+        public IEnumerator PositionChangeIE(Vector3 Position, Cube C)
         {
-            Animating = true;
-            Solid = false;
-            if ((Position - transform.position).magnitude <= 0.1f)
+            C.Animating = true;
+            C.Solid = false;
+            if ((Position - C.transform.position).magnitude <= 0.1f)
             {
-                transform.position = Position;
+                C.transform.position = Position;
             }
             else
             {
-                Vector3 OriPosition = transform.position;
-                APTime = MaxAPTime;
-                while (APTime > 0)
+                Vector3 OriPosition = C.transform.position;
+                C.APTime = C.MaxAPTime;
+                while (C.APTime > 0)
                 {
-                    transform.position = OriPosition + (Position - OriPosition) * APCurve.Evaluate(1 - APTime / MaxAPTime);
-                    APTime -= Time.deltaTime;
+                    C.transform.position = OriPosition + (Position - OriPosition) * C.APCurve.Evaluate(1 - C.APTime / C.MaxAPTime);
+                    C.APTime -= Time.deltaTime;
                     yield return 0;
                 }
-                transform.position = Position;
+                C.transform.position = Position;
             }
-            Solid = true;
-            Animating = false;
+            C.Solid = true;
+            yield return new WaitForSeconds(0.2f);
+            C.Animating = false;
         }
 
         public void AddScript()
@@ -362,7 +453,18 @@ namespace LAP
 
         public bool CanEdit()
         {
-            return !Processing && !Animating && !Locked;
+            return !Processing && !Animating;
+        }
+
+        public bool Empty()
+        {
+            bool a = true;
+            for (int i = Scripts.Count - 1; i >= 0; i--)
+            {
+                if (Scripts[i].Command != null && Scripts[i].Command != "")
+                    a = false;
+            }
+            return a;
         }
     }
 }
