@@ -100,7 +100,9 @@
     <Compile Include="Assets\Script\SaveControl.cs" />
     <Compile Include="Assets\Script\Script.cs" />
     <Compile Include="Assets\Script\ScriptRenderer.cs" />
+    <Compile Include="Assets\Script\SoundtrackControl.cs" />
     <Compile Include="Assets\Script\ThatControl.cs" />
+    <Compile Include="Assets\Script\TutorialControl.cs" />
     <Compile Include="Assets\Script\UIControl.cs" />
     <Compile Include="Assets\Script\VictoryCube.cs" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />

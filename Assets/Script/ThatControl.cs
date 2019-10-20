@@ -22,6 +22,7 @@ namespace LAP
         [Space]
         public bool AlreadyLoading;
         public bool AlreadyWin;
+        public bool AlreadyOpen;
         public bool AlreadyResetting;
 
         private void Awake()
@@ -69,6 +70,7 @@ namespace LAP
             AxisRenderer.SetActive(false);
             foreach (Cube C in Opens)
                 C.Exe(true);
+            AlreadyOpen = true;
         }
 
         public void Retry()
@@ -101,6 +103,15 @@ namespace LAP
             MainCharacterControl.Main.MovControl.AlreadyDead = true;
             MainCharacterControl.Main.LapControl.Active = false;
             FinaleAnim.SetTrigger("Play");
+            StartCoroutine("FinaleIE");
+        }
+
+        public IEnumerator FinaleIE()
+        {
+            yield return new WaitForSeconds(12.5f);
+            while (!Input.anyKeyDown)
+                yield return 0;
+            Application.Quit();
         }
 
         public void NextLevel()
@@ -117,7 +128,7 @@ namespace LAP
         {
             SceneFade.SetTrigger("Play");
             yield return new WaitForSeconds(0.52f);
-            UnityEngine.SceneManagement.SceneManager.LoadScene(CurrentSceneName);
+            UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(CurrentSceneName);
         }
     }
 }

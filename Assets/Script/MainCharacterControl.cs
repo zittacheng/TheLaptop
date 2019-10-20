@@ -181,6 +181,7 @@ namespace LAP
         public void ChangeEditCount(int Value)
         {
             EditCount += Value;
+            SoundtrackControl.Main.TopActive = true;
         }
 
         public void SetPosition(Vector3 Value)

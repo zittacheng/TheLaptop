@@ -63,7 +63,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Yourself
+  m_text: Myself
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c69bf48c96c341041aa736850f2384a2, type: 2}
   m_sharedMaterial: {fileID: 21685261440789928, guid: c69bf48c96c341041aa736850f2384a2,

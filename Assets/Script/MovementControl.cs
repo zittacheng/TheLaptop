@@ -60,7 +60,7 @@ namespace LAP
             if (Rig.velocity.y < -50f)
                 Rig.velocity = new Vector3(Rig.velocity.x, -50f, Rig.velocity.z);
 
-            if (transform.position.y <= -150f)
+            if (transform.position.y <= -100f)
             {
                 ThatControl.Main.CharacterReset();
             }

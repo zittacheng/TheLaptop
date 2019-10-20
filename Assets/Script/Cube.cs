@@ -288,13 +288,7 @@ namespace LAP
             {
                 if (int.TryParse(Value, out int a))
                 {
-                    float t = 0;
-                    while (t < a)
-                    {
-                        yield return 0;
-                        if (!MainCharacterControl.Main.Stasis())
-                            t += Time.deltaTime;
-                    }
+                    yield return Delay(a);
                 }
             }
             else if (Command == "Loop")
@@ -303,7 +297,7 @@ namespace LAP
                 CurrentLoopTime = LoopTime;
                 yield return 0;
             }
-            else if (Command == "LoopDelay")
+            else if (Command == "LoopDelay_Legacy")
             {
                 if (int.TryParse(Value, out int a))
                     LoopTime = a;
@@ -318,7 +312,7 @@ namespace LAP
             {
                 GameObject G = Instantiate(ThatControl.Main.CubePrefab);
                 G.transform.position = transform.position;
-                yield return new WaitForSeconds(0.1f);
+                yield return Delay(0.1f);
             }
             if (Command == "InstantiateX")
             {
@@ -326,7 +320,7 @@ namespace LAP
                 G.transform.position = transform.position;
                 if (int.TryParse(Value, out int a))
                     StartCoroutine(PositionChangeIE(transform.position + new Vector3(a * 2, 0, 0), G.GetComponent<Cube>()));
-                yield return new WaitForSeconds(0.1f);
+                yield return Delay(0.1f);
             }
             else if (Command == "InstantiateY")
             {
@@ -334,7 +328,7 @@ namespace LAP
                 G.transform.position = transform.position;
                 if (int.TryParse(Value, out int a))
                     StartCoroutine(PositionChangeIE(transform.position + new Vector3(0, a * 2, 0), G.GetComponent<Cube>()));
-                yield return new WaitForSeconds(0.1f);
+                yield return Delay(0.1f);
             }
             else if (Command == "InstantiateZ")
             {
@@ -342,7 +336,7 @@ namespace LAP
                 G.transform.position = transform.position;
                 if (int.TryParse(Value, out int a))
                     StartCoroutine(PositionChangeIE(transform.position + new Vector3(0, 0, a * 2), G.GetComponent<Cube>()));
-                yield return new WaitForSeconds(0.1f);
+                yield return Delay(0.1f);
             }
             else if (Command == "Destroy")
             {
@@ -419,8 +413,19 @@ namespace LAP
             if (Mathf.Abs(C.transform.position.x) > 1000 || Mathf.Abs(C.transform.position.y) > 1000 || Mathf.Abs(C.transform.position.z) > 1000)
                 Destroy(C.gameObject);
             C.Solid = true;
-            yield return new WaitForSeconds(0.2f);
+            yield return Delay(0.2f);
             C.Animating = false;
+        }
+
+        public IEnumerator Delay(float t)
+        {
+            float a = t;
+            while (a > 0)
+            {
+                yield return 0;
+                if (!MainCharacterControl.Main.Stasis())
+                    a -= Time.deltaTime;
+            }
         }
 
         public void AddScript()
